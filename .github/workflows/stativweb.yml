@@ -43,18 +43,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4.1.1
 
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
-
       # Runs a single command using the runners shell
       - name: 'Terraform init'
         id: init
         run: terraform init
         working-directory: ${{ env.WORKING_DIR }}       
-
-      - name: Select Terraform workspace
-        run: terraform workspace select ${{ github.event.inputs.action_type }} || terraform workspace new ${{ github.event.inputs.action_type }}
-        working-directory: ${{ env.WORKING_DIR }}
 
       - name: 'Terraform plan'
         id: plan
