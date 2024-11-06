@@ -10,7 +10,7 @@ on:
       - 'Iac-Terraform/mod8/**'
     
   #Allows you to run this workflow manally from the Actions tab
-  Workflow_dispatch:
+  workflow_dispatch:
     inputs:
       action_type:
         description: 'What action should be performed? (apply/destroy)'
