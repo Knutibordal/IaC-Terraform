@@ -10,16 +10,6 @@ on:
       - 'mod8/**'
     
   #Allows you to run this workflow manally from the Actions tab
-  workflow_dispatch:
-    inputs:
-      action_type:
-        description: 'What action should be performed? (apply/destroy)'
-        required: true
-        default: 'apply'
-        type: choice
-        options:
-          - 'apply'
-          - 'destroy'
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -54,15 +44,14 @@ jobs:
         run: terraform plan
         working-directory: ${{ env.WORKING_DIR }} 
 
-      - name: 'Terraform apply'
-        if: github.event.inputs.action_type == 'apply'
-        id: apply
-        run: terraform apply -auto-approve
-        working-directory: ${{ env.WORKING_DIR }}
-
-      - name: 'Terraform destroy'
-        if: github.event.inputs.action_type == 'destroy'
-        run: terraform destroy -auto-approve
-        working-directory: ${{ env.WORKING_DIR }}
-                    
-     
+      - name: 'Check last commit message'
+        id: commit
+        run: echo "::set-output name=message::$(git log --format=%B -n 1)"
+      - name: 'Conditionally run Terraform action'
+        run: |
+          if [[ "${{ steps.commit.outputs.message }}" == *"destroy"* ]]; then
+            terraform destroy -auto-approve
+          else
+            terraform apply -auto-approve
+          fi
+        working-directory: ${{ env.WORKING_DIR }} 
