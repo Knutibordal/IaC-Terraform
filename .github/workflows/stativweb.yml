@@ -8,7 +8,13 @@ on:
   push:
     paths:
       - 'GithubIac/github-terreform/mod8/**'
-
+#Allows you to run this workflow manally from the Actions tab
+Workflow_dispatch:
+  inputs:
+    action_type:
+      description: 'What action should be performed? (apply/destroy)'
+      required: true
+      default: 'apply'
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -41,6 +47,17 @@ jobs:
         id: plan
         run: terraform plan
         working-directory: ${{ env.WORKING_DIR }} 
+
+      - name: 'Terraform apply'
+        if: github.event.inputs.action_type == 'apply'
+        id: apply
+        run: terraform apply -auto-approve
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: 'Terraform destroy'
+        if: github.event.inputs.action_type == 'destroy'
+        run: terraform destroy -auto-approve
+        working-directory: ${{ env.WORKING_DIR }}
                     
       - name: 'Check last commit message'
         id: commit
