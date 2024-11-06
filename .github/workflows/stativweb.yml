@@ -7,7 +7,7 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     paths:
-      - 'Iac-Terraform/mod8/**'
+      - 'mod8/**'
     
   #Allows you to run this workflow manally from the Actions tab
   workflow_dispatch:
@@ -35,7 +35,7 @@ jobs:
       ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      WORKING_DIR: ./Iac-Terraform/mod8
+      WORKING_DIR: ./mod8
     
       
     # Steps represent a sequence of tasks that will be executed as part of the job
