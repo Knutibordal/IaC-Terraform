@@ -89,3 +89,9 @@ jobs:
         id: get_web_endpoint
         run: echo "WEB_ENDPOINT=$(terraform output -raw primary_web_endpoint)" 
         working-directory: ${{ env.WORKING_DIR }}
+
+      - name: Terraform Destroy
+        if: github.event_name == 'workflow_dispatch' # Sikrer at den bare kjører manuelt
+        run: terraform destroy -auto-approve
+        working-directory: ${{ env.WORKING_DIR }}
+
